@@ -9,12 +9,12 @@ import reactor.core.publisher.Mono
 @Controller
 class UIController {
 
-    @GetMapping("/")
-    fun home(exchange: ServerWebExchange): Mono<String> {
-        return exchange.session.flatMap {
-            val user = it.attributes["user"] as? String
-            if (user == null) Mono.just("redirect:/login")
-            else Mono.just("home") // We'll add this page next
-        }
-    }
+//    @GetMapping("/")
+//    fun home(exchange: ServerWebExchange): Mono<String> {
+//        return exchange.session.flatMap {
+//            val user = it.attributes["user"] as? String
+//            if (user == null) Mono.just("redirect:/login")
+//            else Mono.just("home") // We'll add this page next
+//        }
+//    }
 }

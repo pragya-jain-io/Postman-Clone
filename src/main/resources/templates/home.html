@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Home</title>
+</head>
+<body>
+<h2>Welcome, <span th:text="${user}"></span></h2>
+
+<form action="/send-request" method="post">
+  <label for="url">Enter URL:</label>
+  <input type="text" id="url" name="url" required/>
+  <button type="submit">Send Request</button>
+</form>
+
+<div th:if="${response != null}">
+  <h3>Response:</h3>
+  <pre th:text="${response}"></pre>
+</div>
+
+<a href="/logout">Logout</a>
+</body>
+</html>

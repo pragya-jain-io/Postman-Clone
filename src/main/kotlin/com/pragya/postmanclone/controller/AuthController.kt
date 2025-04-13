@@ -13,15 +13,20 @@ class AuthController {
     fun showLogin(): String = "login"
 
     @PostMapping("/login")
-    fun login(
-        @RequestParam username: String,
-        exchange: ServerWebExchange
-    ): Mono<String> {
-        return exchange.session.flatMap {
-            it.attributes["user"] = username
-            Mono.just("redirect:/")
+    fun login(exchange: ServerWebExchange): Mono<String> {
+        return exchange.formData.flatMap { data ->
+            val username = data.getFirst("username")
+            if (username.isNullOrBlank()) {
+                Mono.just("redirect:/login")
+            } else {
+                exchange.session.flatMap {
+                    it.attributes["user"] = username
+                    Mono.just("redirect:/")
+                }
+            }
         }
     }
+
 
     @GetMapping("/logout")
     fun logout(exchange: ServerWebExchange): Mono<String> {
