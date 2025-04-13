@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>History</title></head>
+<body>
+<h2>Request History for <span th:text="${user}"></span></h2>
+<a href="/">← Back to Home</a>
+<ul>
+  <li th:each="entry : ${history}">
+    <b th:text="${entry.method}"></b>
+    <span th:text="${entry.url}"></span> <br/>
+    <small>Headers: <span th:text="${entry.headers}"></span></small><br/>
+    <small>Body: <span th:text="${entry.body}"></span></small><br/>
+    <small>Response: <span th:text="${entry.response}"></span></small>
+    <hr/>
+  </li>
+</ul>
+</body>
+</html>

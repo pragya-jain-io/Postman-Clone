@@ -1,5 +1,7 @@
 package com.pragya.postmanclone.controller
 
+import com.pragya.postmanclone.model.RequestHistory
+import com.pragya.postmanclone.repository.RequestHistoryRepository
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,7 +12,8 @@ import org.springframework.web.server.WebSession
 import reactor.core.publisher.Mono
 
 @Controller
-class RequestController(private val webClientBuilder: WebClient.Builder) {
+class RequestController(private val webClientBuilder: WebClient.Builder,
+                        private val requestRepo: RequestHistoryRepository){
     val webClient = webClientBuilder.build()
 
     @GetMapping("/")
@@ -52,16 +55,46 @@ class RequestController(private val webClientBuilder: WebClient.Builder) {
 
         return responseMono
             .onErrorResume { Mono.just("Error: ${it.message}") }
-            .flatMap {
-                model.addAttribute("response", it)
+            .flatMap { response ->
                 exchange.session.flatMap { session ->
                     val user = session.attributes["user"] as? String ?: "Unknown"
-                    model.addAttribute("user", user)
-                    Mono.just("home")
+
+                    val history = RequestHistory(
+                        user = user,
+                        method = form.method,
+                        url = form.url,
+                        headers = form.headers,
+                        body = form.body,
+                        response = response
+                    )
+
+                    requestRepo.save(history).then(
+                        Mono.fromCallable {
+                            model.addAttribute("response", response)
+                            model.addAttribute("user", user)
+                            "home"
+                        }
+                    )
                 }
             }
+
     }
 
+    @GetMapping("/history")
+    fun showHistory(exchange: ServerWebExchange, model: Model): Mono<String> {
+        return exchange.session.flatMap { session ->
+            val user = session.attributes["user"] as? String
+            if (user == null) {
+                Mono.just("redirect:/login")
+            } else {
+                requestRepo.findByUser(user).collectList().map { historyList ->
+                    model.addAttribute("history", historyList)
+                    model.addAttribute("user", user)
+                    "history"
+                }
+            }
+        }
+    }
 
 
 
