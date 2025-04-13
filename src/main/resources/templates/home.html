@@ -7,8 +7,23 @@
 <h2>Welcome, <span th:text="${user}"></span></h2>
 
 <form action="/send-request" method="post">
-  <label for="url">Enter URL:</label>
-  <input type="text" id="url" name="url" required/>
+  <label for="url">URL:</label>
+  <input type="text" id="url" name="url" required/><br/><br/>
+
+  <label for="method">Method:</label>
+  <select name="method" id="method">
+    <option>GET</option>
+    <option>POST</option>
+    <option>PUT</option>
+    <option>DELETE</option>
+  </select><br/><br/>
+
+  <label for="headers">Headers (key:value per line):</label><br/>
+  <textarea name="headers" id="headers" rows="4" cols="50"></textarea><br/><br/>
+
+  <label for="body">Body (JSON or raw):</label><br/>
+  <textarea name="body" id="body" rows="6" cols="50"></textarea><br/><br/>
+
   <button type="submit">Send Request</button>
 </form>
 

@@ -1,5 +1,6 @@
 package com.pragya.postmanclone.controller
 
+import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -26,32 +27,41 @@ class RequestController(private val webClientBuilder: WebClient.Builder) {
     }
 
     @PostMapping("/send-request")
-    fun sendRequest(@ModelAttribute form: RequestForm, model: Model): Mono<String> {
-        println("Inside sendRequest")
-        val url = form.url
+    fun sendRequest(
+        @ModelAttribute form: RequestForm,
+        model: Model,
+        exchange: ServerWebExchange
+    ): Mono<String> {
+        val headersMap = form.headers.lines()
+            .mapNotNull {
+                val parts = it.split(":", limit = 2)
+                if (parts.size == 2) parts[0].trim() to parts[1].trim() else null
+            }.toMap()
 
-        if (url.isNullOrBlank()) {
-            println("URL is null or blank!")
-            model.addAttribute("response", "No URL provided")
-            return Mono.just("home")
+        var requestSpec = webClient.method(HttpMethod.valueOf(form.method.uppercase()))
+            .uri(form.url)
+            .headers { httpHeaders ->
+                headersMap.forEach { (k, v) -> httpHeaders.set(k, v) }
+            }
+
+        val responseMono = if (form.method.uppercase() == "GET") {
+            requestSpec.retrieve().bodyToMono(String::class.java)
+        } else {
+            requestSpec.bodyValue(form.body).retrieve().bodyToMono(String::class.java)
         }
 
-        println("URL received: $url")
-
-        return webClient
-            .get()
-            .uri(url)
-            .retrieve()
-            .bodyToMono(String::class.java)
-            .map { response ->
-                model.addAttribute("response", response)
-                "home"
-            }
-            .onErrorResume {
-                model.addAttribute("response", "Error: ${it.message}")
-                Mono.just("home")
+        return responseMono
+            .onErrorResume { Mono.just("Error: ${it.message}") }
+            .flatMap {
+                model.addAttribute("response", it)
+                exchange.session.flatMap { session ->
+                    val user = session.attributes["user"] as? String ?: "Unknown"
+                    model.addAttribute("user", user)
+                    Mono.just("home")
+                }
             }
     }
+
 
 
 
