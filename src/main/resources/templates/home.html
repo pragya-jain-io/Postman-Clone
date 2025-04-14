@@ -8,21 +8,21 @@
 
 <form action="/send-request" method="post">
   <label for="url">URL:</label>
-  <input type="text" id="url" name="url" required/><br/><br/>
+  <input type="text" id="url" name="url" th:value="${form?.url}" required/><br/><br/>
 
   <label for="method">Method:</label>
-  <select name="method" id="method">
-    <option>GET</option>
-    <option>POST</option>
-    <option>PUT</option>
-    <option>DELETE</option>
+  <select name="method" id="method" >
+    <option th:value="'GET'" th:selected="${form?.method == 'GET'}">GET</option>
+    <option th:value="'POST'" th:selected="${form?.method == 'POST'}">POST</option>
+    <option th:value="'PUT'" th:selected="${form?.method == 'PUT'}">PUT</option>
+    <option th:value="'DELETE'" th:selected="${form?.method == 'DELETE'}">DELETE</option>
   </select><br/><br/>
 
   <label for="headers">Headers (key:value per line):</label><br/>
-  <textarea name="headers" id="headers" rows="4" cols="50"></textarea><br/><br/>
+  <textarea name="headers" id="headers" th:text="${form?.headers}" rows="4" cols="50"></textarea><br/><br/>
 
   <label for="body">Body (JSON or raw):</label><br/>
-  <textarea name="body" id="body" rows="6" cols="50"></textarea><br/><br/>
+  <textarea name="body" id="body" th:text="${form?.body}" rows="6" cols="50"></textarea><br/><br/>
 
   <button type="submit">Send Request</button>
 </form>

@@ -65,13 +65,14 @@ class RequestController(private val webClientBuilder: WebClient.Builder,
                         url = form.url,
                         headers = form.headers,
                         body = form.body,
-                        response = response
+                        response = response.take(500)
                     )
 
                     requestRepo.save(history).then(
                         Mono.fromCallable {
                             model.addAttribute("response", response)
                             model.addAttribute("user", user)
+                            model.addAttribute("form", form)
                             "home"
                         }
                     )
