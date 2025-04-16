@@ -1,18 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>History</title></head>
+<head>
+  <title>Request History</title>
+  <style>
+    body {
+        background-color: #282a36;
+        color: #f8f8f2;
+        font-family: 'Fira Code', monospace;
+        padding: 2rem;
+    }
+
+    h1 {
+        color: #bd93f9;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    a {
+        color: #8be9fd;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        display: inline-block;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    li {
+        background-color: #44475a;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 0 10px #6272a4;
+    }
+
+    .timestamp {
+        color: #ffb86c;
+        font-size: 0.9rem;
+    }
+
+    .method {
+        color: #ff79c6;
+        font-weight: bold;
+    }
+
+    .url {
+        color: #8be9fd;
+    }
+
+    .meta {
+        font-size: 0.85rem;
+        color: #f1fa8c;
+    }
+
+    hr {
+        border: 1px solid #6272a4;
+        margin-top: 1rem;
+    }
+  </style>
+</head>
 <body>
-<h2>Request History for <span th:text="${user}"></span></h2>
-<a href="/">← Back to Home</a>
+
+<a href="/"> &larr; Back to Dashboard</a>
+
+<h1><span th:text="${user}"></span>'s Request History </h1>
+
 <ul>
   <li th:each="entry : ${history}">
-    <b th:text="${entry.method}"></b>
-    <span th:text="${entry.url}"></span> <br/>
-    <small>Headers: <span th:text="${entry.headers}"></span></small><br/>
-    <small>Body: <span th:text="${entry.body}"></span></small><br/>
-    <small>Response: <span th:text="${entry.response}"></span></small>
-    <hr/>
+    <div class="timestamp" th:text="${#dates.format(entry.timestamp, 'dd MMM yyyy HH:mm:ss')}"></div>
+    <div>
+      <span class="method" th:text="${entry.method}"></span>
+      <span class="url" th:text="${entry.url}"></span>
+    </div>
+    <div class="meta">
+      <div>Headers: <span th:text="${entry.headers}"></span></div>
+      <div>Body: <span th:text="${entry.body}"></span></div>
+      <div>Response: <span th:text="${entry.response}"></span></div>
+    </div>
+    <hr />
   </li>
 </ul>
+
 </body>
 </html>

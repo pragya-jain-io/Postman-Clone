@@ -28,9 +28,16 @@
 </form>
 
 <div th:if="${response != null}">
-  <h3>Response:</h3>
+
+  <h3>Response Status: <span th:text="${statusCode}"></span></h3>
+  <h3>Time Taken: <span th:text="${responseTime} + ' ms'"></span></h3>
+  <h3>Response Headers:</h3>
+  <pre th:text="${responseHeaders}"></pre>
+  <h3>Response Body:</h3>
   <pre th:text="${response}"></pre>
+
 </div>
+
 
 <a href="/logout">Logout</a>
 <a href="/history">

@@ -1,0 +1,43 @@
+body.dracula-bg {
+    background-color: #282a36;
+    color: #f8f8f2;
+    font-family: 'Fira Code', monospace;
+    padding: 20px;
+}
+
+.text-accent {
+    color: #ff79c6;
+}
+
+.link-back {
+    color: #8be9fd;
+    text-decoration: none;
+}
+
+.link-back:hover {
+    text-decoration: underline;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+}
+
+.history-item {
+    margin-bottom: 20px;
+}
+
+.entry-meta {
+    font-size: 1rem;
+    color: #bd93f9;
+}
+
+.entry-details small {
+    display: block;
+    margin: 2px 0;
+    color: #50fa7b;
+}
+
+.divider {
+    border-color: #44475a;
+}
