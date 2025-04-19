@@ -2,47 +2,157 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Home</title>
+  <style>
+    body {
+        background-color: #282a36;
+        color: #f8f8f2;
+        font-family: 'Fira Code', monospace;
+        padding: 2rem;
+        margin: 0;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        color: #bd93f9;
+        font-size: 2rem;
+    }
+
+    .logout-link {
+        color: #ff5555;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        background-color: #44475a;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+    .logout-link:hover {
+        background-color: #ff5555;
+        color: #282a36;
+    }
+
+    form {
+        background-color: #44475a;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #6272a4;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    label {
+        color: #f8f8f2;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+        width: 100%;
+        background-color: #6272a4;
+        color: #f8f8f2;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 5px;
+        margin-top: 0.3rem;
+        margin-bottom: 1rem;
+        font-family: 'Fira Code', monospace;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    button {
+        background-color: #50fa7b;
+        color: #282a36;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #8be9fd;
+    }
+
+    .history-button {
+        background-color: #bd93f9;
+        color: #282a36;
+    }
+
+    .history-button:hover {
+        background-color: #ff79c6;
+    }
+
+    h3 {
+        color: #ffb86c;
+        margin-top: 1.5rem;
+    }
+
+    pre {
+        background-color: #44475a;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        color: #f1fa8c;
+    }
+  </style>
 </head>
 <body>
-<h2>Welcome, <span th:text="${user}"></span></h2>
+
+<header>
+  <h2>Welcome, <span th:text="${user}"></span></h2>
+  <a href="/logout" class="logout-link">Logout</a>
+</header>
 
 <form action="/send-request" method="post">
   <label for="url">URL:</label>
-  <input type="text" id="url" name="url" th:value="${form?.url}" required/><br/><br/>
+  <input type="text" id="url" name="url" th:value="${form?.url}" required />
 
   <label for="method">Method:</label>
-  <select name="method" id="method" >
+  <select name="method" id="method">
     <option th:value="'GET'" th:selected="${form?.method == 'GET'}">GET</option>
     <option th:value="'POST'" th:selected="${form?.method == 'POST'}">POST</option>
     <option th:value="'PUT'" th:selected="${form?.method == 'PUT'}">PUT</option>
     <option th:value="'DELETE'" th:selected="${form?.method == 'DELETE'}">DELETE</option>
-  </select><br/><br/>
+  </select>
 
-  <label for="headers">Headers (key:value per line):</label><br/>
-  <textarea name="headers" id="headers" th:text="${form?.headers}" rows="4" cols="50"></textarea><br/><br/>
+  <label for="headers">Headers (key:value per line):</label>
+  <textarea name="headers" id="headers" th:text="${form?.headers}" rows="4"></textarea>
 
-  <label for="body">Body (JSON or raw):</label><br/>
-  <textarea name="body" id="body" th:text="${form?.body}" rows="6" cols="50"></textarea><br/><br/>
+  <label for="body">Body (JSON or raw):</label>
+  <textarea name="body" id="body" th:text="${form?.body}" rows="6"></textarea>
 
-  <button type="submit">Send Request</button>
+  <div class="form-buttons">
+    <button type="submit">Send Request</button>
+    <a href="/history"><button type="button" class="history-button">View History</button></a>
+  </div>
 </form>
 
 <div th:if="${response != null}">
-
   <h3>Response Status: <span th:text="${statusCode}"></span></h3>
   <h3>Time Taken: <span th:text="${responseTime} + ' ms'"></span></h3>
+
   <h3>Response Headers:</h3>
   <pre th:text="${responseHeaders}"></pre>
+
   <h3>Response Body:</h3>
   <pre th:text="${response}"></pre>
-
 </div>
-
-
-<a href="/logout">Logout</a>
-<a href="/history">
-  <button>View History</button>
-</a>
 
 </body>
 </html>

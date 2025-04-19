@@ -2,12 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
+    <style>
+        body {
+            background-color: #282a36;
+            color: #f8f8f2;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #44475a;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 12px #6272a4;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #bd93f9;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #6272a4;
+            color: #f8f8f2;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #50fa7b;
+            color: #282a36;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #8be9fd;
+        }
+    </style>
 </head>
 <body>
-<h2>Login</h2>
-<form action="/login" method="post">
-    <input type="text" name="username" placeholder="Enter username" required />
-    <button type="submit">Login</button>
-</form>
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Enter username" required />
+        <button type="submit">Login</button>
+    </form>
+</div>
+
 </body>
 </html>
